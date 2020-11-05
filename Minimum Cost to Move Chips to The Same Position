@@ -63,3 +63,20 @@ public:
         return ans;
     }
 };
+
+
+//author solution -> just to count the odd and even positions and retun minimum
+
+class Solution {
+public:
+    int minCostToMoveChips(vector<int>& pos) {
+        int odd=0,even=0;
+        
+        for(auto &v:pos){
+            if(v%2) ++even;
+            else ++odd;
+        }
+        
+        return min(even,odd);
+    }
+};
