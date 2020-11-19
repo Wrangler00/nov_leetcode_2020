@@ -68,3 +68,38 @@ public:
         return solve(i);
     }
 };
+
+
+//more clear solution
+
+class Solution {
+    string src;
+public:
+    string repeat(int i,string s){
+        string tmp="";
+        for(int j=0;j<i;j++)    tmp+=s;
+        return tmp;
+    }
+    
+    string solve(int& i){
+        int f = 0;
+        while(isdigit(src[i]))  
+            f = f*10+(src[i++]-'0');
+        ++i;
+        
+        string tmp="";
+        
+        while(src[i]!=']'){
+            if(isdigit(src[i])) tmp+=solve(i);
+            else    tmp+=src[i];
+            ++i;
+        }
+        
+        return repeat(f,tmp);
+    }
+    string decodeString(string s) {
+        src= "1["+ s + "]";
+        int i=0;
+        return solve(i);
+    }
+};
