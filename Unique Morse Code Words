@@ -24,7 +24,7 @@ The length of words will be at most 100.
 Each words[i] will have length in range [1, 12].
 words[i] will only consist of lowercase letters.
 
-//cpp my solution
+//cpp my solution using maps
 
 class Solution {
 public:
@@ -39,6 +39,28 @@ public:
                 st+=morse[ch-'a'];
             }
             mp[st] = true;
+        }
+        
+        return (int)mp.size();
+    }
+};
+
+
+//using sets
+
+class Solution {
+public:
+    int uniqueMorseRepresentations(vector<string>& words) {
+       vector<string> morse = {".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+        
+        set<string> mp;
+        
+        for(auto &w:words){
+            string st="";
+            for(auto &ch:w){
+                st+=morse[ch-'a'];
+            }
+            mp.insert(st);
         }
         
         return (int)mp.size();
