@@ -1,0 +1,111 @@
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . The integer division should truncate toward zero.
+
+Example 1:
+
+Input: "3+2*2"
+Output: 7
+Example 2:
+
+Input: " 3/2 "
+Output: 1
+Example 3:
+
+Input: " 3+5 / 2 "
+Output: 5
+Note:
+
+You may assume that the given expression is always valid.
+Do not use the eval built-in library function.
+
+//cpp my solution (not optimized and very lengthy solution)
+
+class Solution {
+    int ans;
+    const int fix = -999;
+public:
+    void solve(string s){
+        int pos=-1,len = s.length();
+        string st="";
+        if(s.find("/")!=string::npos || s.find("*")!=string::npos){
+            int pos1 = s.find("/");
+            int pos2 = s.find("*");
+            pos1 = (pos1==string::npos ? INT_MAX:pos1);
+            pos2 = (pos2==string::npos ? INT_MAX:pos2);
+        
+            string l="",r="";
+            pos = pos1<pos2?pos1:pos2;
+            int i=pos-1;
+            
+            if(pos1<pos2){
+                while(i>=0 && s[i]!='+' && s[i]!='-' && s[i]!='*' && s[i]!='/')
+                    l = s[i--]+l;
+            
+                st = s.substr(0,i+1);
+                i=pos+1;
+
+                while(i<len && s[i]!='+' && s[i]!='-' && s[i]!='*' && s[i]!='/')
+                    r += s[i++];
+                st+= to_string((int)floor(stoi(l)/stoi(r)));
+            }else{
+                while(i>=0 && s[i]!='+' && s[i]!='-' && s[i]!='*' && s[i]!='/')
+                    l = s[i--]+l;
+            
+                st = s.substr(0,i+1);
+                i=pos+1;
+
+                while(i<len && s[i]!='+' && s[i]!='-' && s[i]!='*' && s[i]!='/')
+                    r += s[i++];
+                st+= to_string(stoi(l)*stoi(r));
+            }
+            
+            st+= s.substr(i);
+            solve(st);
+            
+        }else if(s.find("+")!=string::npos || s.find("-")!=string::npos){
+            int res=0;
+            string tmp="";
+            int which=-1;
+            for(int i=0;i<len;i++){
+                if(s[i]=='+'){
+                    if(which == 1){
+                        res = res+stoi(tmp);
+                    }else if(which == 0){
+                        res = res-stoi(tmp);
+                    }else{
+                        res = stoi(tmp);   
+                    }
+                    which=true;
+                    tmp="";
+                }else if(s[i]=='-'){
+                    if(which == 1){
+                        res = res+stoi(tmp);
+                    }else if(which == 0){
+                        res = res-stoi(tmp);
+                    }else{
+                        res = stoi(tmp);   
+                    }
+                    which=false;
+                    tmp="";
+                }else{
+                    tmp+=s[i];
+                }
+            }
+            if(which)
+                res+=stoi(tmp);
+            else
+                res-=stoi(tmp);
+            ans=res;
+        }else{
+            ans = stoi(s);
+        }
+        return;
+    }
+    int calculate(string s) {
+        s.erase(remove(s.begin(), s.end(), ' '), s.end());
+        // cout<<s;
+        solve(s);
+        return ans;
+    }
+};
