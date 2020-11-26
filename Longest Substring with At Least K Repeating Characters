@@ -1,0 +1,61 @@
+Given a string s and an integer k, return the length of the longest substring of s such that the frequency of each character in this substring is greater than or equal to k.
+
+ 
+
+Example 1:
+
+Input: s = "aaabb", k = 3
+Output: 3
+Explanation: The longest substring is "aaa", as 'a' is repeated 3 times.
+Example 2:
+
+Input: s = "ababbc", k = 2
+Output: 5
+Explanation: The longest substring is "ababb", as 'a' is repeated 2 times and 'b' is repeated 3 times.
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+s consists of only lowercase English letters.
+1 <= k <= 105
+
+//cpp my solution
+
+class Solution {
+    int k,maxx=0;
+public:
+    void solve(string s){
+        int len = s.length();
+        vector<int> freq(26,0);
+        vector<bool> isDere(26,false);
+        
+        for(auto &ch:s) ++freq[ch-'a'];
+        
+        bool isAns=true;
+        for(int i=0;i<26;i++){
+            if(freq[i]<k && freq[i]!=0){
+                isDere[i]=true;
+                isAns=false;
+            }
+        }
+        
+        if(isAns)   return maxx=max(maxx,len);
+        
+        string make="";
+        for(int i=0;i<len;i++){
+            if(isDere[s[i]-'a'] && (int)make.length()>0){
+                solve(make);
+                make="";
+            }else if(!isDere[s[i]-'a'])
+                make+=s[i];
+        }
+        
+        if((int)make.length()>0)    solve(make);
+    }
+    int longestSubstring(string s, int K) {
+        k=K;
+        solve(s);
+        return maxx;
+    }
+};
