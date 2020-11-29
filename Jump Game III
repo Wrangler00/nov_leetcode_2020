@@ -1,0 +1,94 @@
+
+
+Given an array of non-negative integers arr, you are initially positioned at start index of the array. When you are at index i, you can jump to i + arr[i] or i - arr[i], check if you can reach to any index with value 0.
+
+Notice that you can not jump outside of the array at any time.
+
+ 
+
+Example 1:
+
+Input: arr = [4,2,3,0,3,1,2], start = 5
+Output: true
+Explanation: 
+All possible ways to reach at index 3 with value 0 are: 
+index 5 -> index 4 -> index 1 -> index 3 
+index 5 -> index 6 -> index 4 -> index 1 -> index 3 
+Example 2:
+
+Input: arr = [4,2,3,0,3,1,2], start = 0
+Output: true 
+Explanation: 
+One possible way to reach at index 3 with value 0 is: 
+index 0 -> index 4 -> index 1 -> index 3
+Example 3:
+
+Input: arr = [3,0,2,1,2], start = 2
+Output: false
+Explanation: There is no way to reach at index 1 with value 0.
+ 
+
+Constraints:
+
+1 <= arr.length <= 5 * 10^4
+0 <= arr[i] < arr.length
+0 <= start < arr.length
+
+//cpp my solution
+//recursive
+
+class Solution {
+    vector<int> arr;
+    int sz;
+public:
+    bool findAns(int i){
+        if(i<0 || i>=sz || arr[i]<0)    return false;
+        if(arr[i]==0)   return true;
+        int tmp=arr[i];
+        arr[i]=-1;
+        
+        return findAns(i-tmp) || findAns(i+tmp);
+    }
+    bool canReach(vector<int>& a, int start) {
+        arr=a;
+        sz = arr.size();
+        return findAns(start);
+    }
+};
+
+
+//without using another function
+
+class Solution {
+public:
+    bool canReach(vector<int>& a, int i) {
+        if(i<0 || i>=(int)a.size() || a[i]<0)    return false;
+        if(a[i]==0)   return true;
+        
+        int tmp=a[i];
+        a[i]=-1;
+        
+        return canReach(a,i-tmp) || canReach(a,i+tmp);
+    }
+};
+
+
+//fastest solution bcoz of IO sync off
+
+static const auto x=[](){
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    return nullptr;
+}();
+
+class Solution {
+public:
+    bool canReach(vector<int>& a, int i) {
+        if(i<0 || i>=(int)a.size() || a[i]<0)    return false;
+        if(!a[i])   return true;
+        
+        a[i]=-a[i];
+        
+        return canReach(a,i-a[i]) || canReach(a,i+a[i]);
+    }
+};
